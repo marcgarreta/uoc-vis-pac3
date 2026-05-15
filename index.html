@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dos hotels, un agost · PAC3 · Visualització de Dades · UOC</title>
+  <meta name="description" content="Storytelling visual sobre l'estacionalitat oculta de dos hotels portuguesos. Dades: Antonio, Almeida & Nunes (2019), 117.398 reserves." />
+  <meta name="author" content="Marc Garreta · UOC" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- =================== HERO =================== -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-eyebrow">
+        PAC3 <span class="dot"></span> Visualització de Dades <span class="dot"></span> UOC
+      </div>
+
+      <h1>
+        Dos hotels,<br />
+        un <span class="ital">agost</span>.
+      </h1>
+
+      <p class="hero-deck">
+        Dos negocis amagats sota la mateixa categoria. Un descobreix les seves dues vides quan llegim el calendari.
+      </p>
+
+      <div class="hero-kpis">
+        <div class="kpi">
+          <div class="kpi-label">Reserves analitzades</div>
+          <div class="kpi-value">117.398</div>
+          <div class="kpi-unit">després de neteja</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Hotels</div>
+          <div class="kpi-value">2</div>
+          <div class="kpi-unit">resort · city</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Període</div>
+          <div class="kpi-value">2015 — 17</div>
+          <div class="kpi-unit">jul 15 → ago 17</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Pic / vall · resort</div>
+          <div class="kpi-value">×3,8</div>
+          <div class="kpi-unit">€50 → €189</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">↓ Llegir</div>
+  </header>
+
+  <!-- =================== INTRO =================== -->
+  <section class="intro">
+    <div class="container">
+      <div class="intro-prose">
+        <p>
+          La columna <code>hotel</code> del dataset té només dos valors: <span class="tag tag-resort">Resort Hotel</span> i <span class="tag tag-city">City Hotel</span>. A primera vista són el mateix tipus de cosa — un edifici, unes habitacions, unes reserves. Apareixen al costat, alimenten les mateixes columnes.
+        </p>
+        <p>
+          Aquesta història mostra com, darrere d'aquesta etiqueta única, hi ha dos models de negoci radicalment diferents. <em>I com un sol número — el preu mig de l'agost — ho fa tot visible.</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SCROLLY =================== -->
+  <section class="scrolly">
+    <div class="scrolly-container">
+
+      <!-- Steps -->
+      <div class="scrolly-steps">
+
+        <article class="step" data-step="1">
+          <div class="step-num">Pas 01 · Volum</div>
+          <h2>Comencem pel volum.</h2>
+          <p>
+            Tots dos hotels reben més reserves a l'estiu. La <span class="tag tag-city">City Hotel</span> de Lisboa, més gran, en concentra més en termes absoluts. La <span class="tag tag-resort">Resort Hotel</span> de l'Algarve la segueix amb un patró similar.
+          </p>
+          <p>
+            Fins aquí, res estrany. Dos hotels portuguesos amb pic estival. Una història coneguda.
+          </p>
+        </article>
+
+        <article class="step" data-step="2">
+          <div class="step-num">Pas 02 · Preu</div>
+          <h2>Però mirem el preu.</h2>
+          <p>
+            Ara canviem la vista: en comptes de comptar reserves, mesurem el <strong>preu mitjà per nit</strong> que paga cada client. I la història es trenca.
+          </p>
+          <p>
+            La <span class="tag tag-city">City</span> es manté en una franja estreta tot l'any: <span class="num">€84</span> al gener, <span class="num">€123</span> al maig. Pugen els preus, sí, però poc.
+          </p>
+        </article>
+
+        <article class="step climax" data-step="3">
+          <div class="step-num">Pas 03 · Clímax</div>
+          <h2>L'agost no és igual<br/>per a tothom.</h2>
+          <p>
+            La línia del <span class="tag tag-resort">Resort</span> es dispara. De <span class="num">€50</span> al novembre a <span class="num">€189</span> a l'agost. <strong>Multiplica el preu per 3,8.</strong> Mentrestant, la City amb prou feines puja 1,5×.
+          </p>
+          <p class="emphasis">
+            No estem davant del mateix tipus de negoci. Un sol número, l'agost, els fa irreconciliables.
+          </p>
+        </article>
+
+        <article class="step" data-step="4">
+          <div class="step-num">Pas 04 · Estada</div>
+          <h2>Quanta estona es queden.</h2>
+          <p>
+            Si el preu varia tant, què més canvia? Comencem per l'<strong>estada mitjana</strong>. Al Resort, els clients que arriben al gener es queden 3 nits. Els que arriben al juny, 5,4. <em>Vacances reals.</em>
+          </p>
+          <p>
+            A la City, el patró és pla: entre 2,8 i 3,3 nits tot l'any. Sempre <em>city break</em>.
+          </p>
+        </article>
+
+        <article class="step" data-step="5">
+          <div class="step-num">Pas 05 · Famílies</div>
+          <h2>Qui ve, i amb qui.</h2>
+          <p>
+            El percentatge de reserves amb <strong>nens o nadons</strong> al Resort passa del <span class="num">4%</span> a l'hivern al <span class="num">20%</span> a l'agost. És literalment un altre lloc: a l'hivern, parelles i jubilats; a l'estiu, famílies.
+          </p>
+          <p>
+            La City també creix en famílies estivals, però discreta: del 3% al 12%.
+          </p>
+        </article>
+
+        <article class="step" data-step="6">
+          <div class="step-num">Pas 06 · Origen</div>
+          <h2>D'on vénen.</h2>
+          <p>
+            A l'hivern, el Resort és un destí <strong>local</strong>: 55% portuguesos, 14% britànics buscant sol. A l'estiu hi arriben espanyols, irlandesos, fins i tot xinesos.
+          </p>
+          <p>
+            La City té una barreja europea més estable: francesos, alemanys, italians, tot l'any. <em>El Resort es transforma. La City respira igual.</em>
+          </p>
+        </article>
+
+        <article class="step" data-step="7">
+          <div class="step-num">Pas 07 · Ingressos</div>
+          <h2>I al final, els ingressos.</h2>
+          <p>
+            La conseqüència econòmica és brutal. El Resort guanya el <span class="num">54,6%</span> dels seus ingressos anuals només al Q3 (jul-set). <strong>Més de la meitat de l'any en tres mesos.</strong>
+          </p>
+          <p>
+            La City reparteix: el seu Q3 és el 35%, però amb un Q2 (30,6%) gairebé igual de fort. Negoci pla; risc pla.
+          </p>
+        </article>
+
+        <article class="step final" data-step="8">
+          <div class="step-num">Pas 08 · Resolució</div>
+          <h2>Dos negocis, una taula.</h2>
+          <p>
+            La columna <code>hotel</code> del dataset té només dos valors: <em>Resort</em> i <em>City</em>. Però darrere d'aquesta etiqueta hi ha dos models radicalment diferents: un negoci <strong>estacional</strong> que viu de l'estiu i que es transforma cada any, i un negoci <strong>constant</strong> que rep clients europeus tot l'any al mateix ritme.
+          </p>
+          <p class="emphasis">
+            Qualsevol model que els tracti igual — predicció de cancel·lacions, pricing dinàmic, inversió en plantilla — començarà amb un error d'origen. El calendari no és un detall: és l'eix.
+          </p>
+        </article>
+
+      </div>
+
+      <!-- Graphic sticky -->
+      <div class="scrolly-graphic">
+        <div class="chart-frame">
+          <div class="chart-caption">
+            <span id="chart-caption-label">Volum de reserves per mes</span>
+            <span class="step-tag" id="chart-step-tag">Pas 01 / 08</span>
+          </div>
+          <div id="chart"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =================== CODA · MÈTODE =================== -->
+  <section class="coda">
+    <div class="container">
+      <div class="coda-eyebrow">Mètode</div>
+      <h2>Quatre <em>peces</em> per veure-ho.</h2>
+
+      <div class="coda-grid">
+        <div class="coda-block">
+          <h3>Dades</h3>
+          <p>
+            Antonio, N., Almeida, A. &amp; Nunes, L. (2019). <em>Hotel booking demand datasets</em>. <a href="https://doi.org/10.1016/j.dib.2018.11.126" target="_blank" rel="noopener">Data in Brief, 22</a>. 119.390 reserves a dos hotels portuguesos entre juliol 2015 i agost 2017.
+          </p>
+        </div>
+        <div class="coda-block">
+          <h3>Neteja</h3>
+          <p>
+            Adults &lt; 10, ADR ∈ [0, 1000), estades positives, ocupants positius, NA→0. <strong>117.398 reserves vàlides.</strong> Procés documentat a <a href="analisi.html">analisi.html</a>.
+          </p>
+        </div>
+        <div class="coda-block">
+          <h3>Eines</h3>
+          <p>
+            HTML/CSS vanilla, <a href="https://plotly.com/javascript/" target="_blank" rel="noopener">Plotly.js</a> per als gràfics, <a href="https://github.com/russellsamora/scrollama" target="_blank" rel="noopener">Scrollama</a> per al scroll narratiu. Hostatjat a GitHub Pages.
+          </p>
+        </div>
+        <div class="coda-block">
+          <h3>Inspiració</h3>
+          <p>
+            Estructura narrativa segons la piràmide de Freytag, citada per Ramos, Ashqar &amp; Contreiras (2024). Estètica editorial inspirada en <em>The Pudding</em> i Reuters Graphics.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== FOOTER =================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div>PAC3 · Visualització de Dades · UOC · 2025</div>
+      <div>Marc Garreta · <a href="https://github.com/marc-garreta/uoc-vis-pac3" target="_blank" rel="noopener">codi al repositori</a></div>
+    </div>
+  </footer>
+
+  <!-- Plotly + Scrollama -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+  <script src="https://unpkg.com/scrollama@3.2.0/build/scrollama.min.js"></script>
+
+  <!-- Dades i charts -->
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+</body>
+</html>

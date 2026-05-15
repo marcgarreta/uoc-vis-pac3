@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anàlisi visual · Procés · PAC3</title>
+  <meta name="description" content="Documentació del procés analític que va portar a la història 'Dos hotels, un agost'." />
+  <meta name="robots" content="noindex,nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <header class="page-header">
+    <div class="page-header-inner">
+      <h1 class="page-header-title">
+        <span>Anàlisi visual</span><span class="pipe">/</span><span>PAC3 · UOC</span>
+      </h1>
+      <nav class="page-header-nav">
+        <a href="index.html">Storytelling</a>
+        <a href="analisi.html" class="is-current">Anàlisi</a>
+        <a href="guio.html">Guió</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="analisi">
+    <div class="analisi-wrap">
+
+      <div class="analisi-eyebrow">Documentació del procés</div>
+      <h1 class="analisi-title">Com es <em>descobreix</em><br/>una història.</h1>
+      <p class="analisi-deck">
+        Aquesta pàgina documenta el procés d'anàlisi visual que va portar a triar la història <em>Dos hotels, un agost</em>. El procés segueix les fases proposades per Ramos, Ashqar &amp; Contreiras (2024): planificació, definició dels insights, contextualització, adaptació al públic i consolidació.
+      </p>
+
+      <!-- ============ 1 ============ -->
+      <section class="analisi-section">
+        <h2 data-num="01 · Origen">El dataset</h2>
+        <p>
+          Antonio, Almeida i Nunes (2019) van publicar a <em>Data in Brief</em> dues bases de dades de reserves d'hotel portugueses, recopilades des dels sistemes PMS dels dos hotels. Cada observació representa una reserva i té 31 variables. Aquí s'analitzen totes dues conjuntament: <strong>119.390 reserves</strong> amb arribada prevista entre l'1 de juliol de 2015 i el 31 d'agost de 2017.
+        </p>
+        <p>
+          Les variables claus per a aquesta història són: <code>hotel</code> (Resort/City), <code>arrival_date_month</code>, <code>adr</code> (preu mig per nit), <code>stays_in_week_nights</code> + <code>stays_in_weekend_nights</code>, <code>children</code> + <code>babies</code>, <code>country</code> i <code>is_canceled</code>.
+        </p>
+      </section>
+
+      <!-- ============ 2 ============ -->
+      <section class="analisi-section">
+        <h2 data-num="02 · Diagnòstic">Detecció d'anomalies</h2>
+        <p>
+          L'anàlisi exploratori amb <code>describe()</code> i histogrames revela diverses anomalies que cal abordar abans de qualsevol agregació:
+        </p>
+        <ul>
+          <li><strong>Adults</strong>: màxim de 55 en una única reserva — clarament erroni.</li>
+          <li><strong>Children</strong>: màxim de 10 amb 4 valors NA.</li>
+          <li><strong>Babies</strong>: màxim de 10, també amb cua llarga sospitosa.</li>
+          <li><strong>ADR</strong>: valors negatius (reserves a cost zero o reemborsades) i un pic anòmal a 5.400 € que distorsiona qualsevol mitjana.</li>
+          <li><strong>Estades</strong>: alguna reserva amb 0 nits totals (ni cap de setmana ni entre setmana).</li>
+          <li><strong>Ocupació</strong>: reserves amb 0 ocupants totals, incoherents amb el concepte mateix de reserva.</li>
+        </ul>
+      </section>
+
+      <!-- ============ 3 ============ -->
+      <section class="analisi-section">
+        <h2 data-num="03 · Neteja">Neteja aplicada</h2>
+        <p>
+          Seguint les regles del notebook docent de l'assignatura:
+        </p>
+        <ul>
+          <li>Eliminar reserves amb <code>adults ≥ 10</code>.</li>
+          <li>Limitar <code>adr</code> al rang <code>[0, 1000)</code>.</li>
+          <li>Eliminar <code>adr == 0</code> (estades de cost zero).</li>
+          <li>Eliminar estades de 0 nits totals.</li>
+          <li>Eliminar reserves sense ocupants.</li>
+          <li>Substituir <code>NA</code> de <code>children</code> per 0.</li>
+        </ul>
+
+        <div class="callout">
+          <span class="callout-num">119.390 → 117.398</span>
+          reserves vàlides després de la neteja. <em>1,67% del dataset eliminat per anomalies o valors absents.</em>
+        </div>
+      </section>
+
+      <!-- ============ 4 ============ -->
+      <section class="analisi-section">
+        <h2 data-num="04 · Comparació">Primera comparació entre hotels</h2>
+        <p>
+          Els histogrames d'ADR per hotel mostren distribucions clarament diferents: el <span class="tag tag-city">City Hotel</span> concentra preus al voltant de 100 € amb una distribució relativament simètrica, mentre que el <span class="tag tag-resort">Resort Hotel</span> presenta una distribució asimètrica amb cua llarga cap a valors alts. Aquesta primera observació suggereix que el resort té una variabilitat de preu molt més gran, però encara no diu <em>quan</em> es produeix.
+        </p>
+      </section>
+
+      <!-- ============ 5 ============ -->
+      <section class="analisi-section">
+        <h2 data-num="05 · Estacionalitat">Patró estacional</h2>
+        <p>
+          Comptant les reserves per data d'arribada al llarg dels tres anys, s'observa un <strong>patró estacional fort</strong>: pic a l'estiu (especialment juliol-agost), vall a l'hivern (novembre-gener). Aquesta observació és consistent amb el sector turístic portuguès, on l'estiu mediterrani concentra bona part de la demanda. Tant Resort com City mostren aquest patró — però amb intensitats molt diferents.
+        </p>
+      </section>
+
+      <!-- ============ 6 ============ -->
+      <section class="analisi-section">
+        <h2 data-num="06 · Descobriment">El gir narratiu</h2>
+        <p>
+          La història apareix quan creuem <strong>preu × mes × hotel</strong>. Les xifres parlen soles:
+        </p>
+        <ul>
+          <li><span class="tag tag-resort">Resort</span> · ADR mínim <span class="num">€50</span> (novembre), màxim <span class="num">€189</span> (agost). Ràtio pic/vall <strong>3,8×</strong>.</li>
+          <li><span class="tag tag-city">City</span> · ADR mínim <span class="num">€84</span> (gener), màxim <span class="num">€123</span> (maig). Ràtio pic/vall <strong>1,5×</strong>.</li>
+        </ul>
+        <p>
+          Aquesta divergència — més del doble del ràtio en un cas que en l'altre — és l'evidència que motiva la història. <em>No és el mateix tipus de negoci.</em> A partir d'aquí, la resta de variables (estada, famílies, origen, ingressos) van completar la imatge: el Resort no només cobra més a l'agost, sinó que canvia de natura cada estiu.
+        </p>
+      </section>
+
+      <!-- ============ 7 ============ -->
+      <section class="analisi-section refs">
+        <h2 data-num="07 · Bibliografia">Referències</h2>
+        <ul>
+          <li>
+            Antonio, N., de Almeida, A., &amp; Nunes, L. (2019). Hotel booking demand datasets. <em>Data in Brief, 22</em>, 41–49. <a href="https://doi.org/10.1016/j.dib.2018.11.126" target="_blank" rel="noopener">https://doi.org/10.1016/j.dib.2018.11.126</a>
+          </li>
+          <li>
+            Ramos, C. M. Q., Ashqar, R. I., &amp; Contreiras, A. (2024). Design of Dashboards for CRM Associated with Health and Wellbeing Tourism. <em>HCII 2024</em>, LNCS 15376, 154–172. <a href="https://doi.org/10.1007/978-3-031-76809-5_12" target="_blank" rel="noopener">https://doi.org/10.1007/978-3-031-76809-5_12</a>
+          </li>
+          <li>
+            Minguillón, J. (2025). <em>Visual analytics of hotel bookings data</em> [Notebook docent]. UOC.
+          </li>
+          <li>
+            Notebook propi de l'anàlisi: <a href="https://github.com/marc-garreta/uoc-vis-pac3/blob/main/notebooks/hotel_bookings.ipynb" target="_blank" rel="noopener">notebooks/hotel_bookings.ipynb</a>
+          </li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+</body>
+</html>
