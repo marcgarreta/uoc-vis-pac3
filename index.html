@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="css/style.css?v=4" />
+  <link rel="stylesheet" href="css/style.css?v=5" />
 </head>
 <body>
 
@@ -68,6 +68,68 @@
         <p>
           Aquesta història mostra com, darrere d'aquesta etiqueta única, hi ha dos models de negoci radicalment diferents. <em>I com un sol número — el preu mig de l'agost — ho fa tot visible.</em>
         </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== PROCÉS · NOTEBOOK =================== -->
+  <section class="process">
+    <div class="container">
+      <div class="process-head">
+        <div class="process-eyebrow">Procés · anàlisi visual al notebook</div>
+        <h2 class="process-title">Com hem <em>trobat</em> la història.</h2>
+        <p class="process-deck">
+          Quatre passos d'exploració visual al notebook van revelar que sota la mateixa columna <code>hotel</code> s'amagaven dos models radicalment diferents.
+        </p>
+      </div>
+
+      <ol class="process-flow">
+
+        <li class="process-step">
+          <div class="process-step-num">01</div>
+          <h3>El dataset</h3>
+          <div class="process-stat">
+            <span class="process-stat-num">119.390</span>
+            <span class="process-stat-unit">reserves brutes · 32 variables</span>
+          </div>
+          <p>Antonio, Almeida &amp; Nunes (2019) van publicar a <em>Data in Brief</em> les reserves de dos hotels portuguesos entre <span class="num">jul 2015</span> i <span class="num">ago 2017</span>.</p>
+        </li>
+
+        <li class="process-step">
+          <div class="process-step-num">02</div>
+          <h3>Anomalies</h3>
+          <div class="process-stat">
+            <span class="process-stat-num">6</span>
+            <span class="process-stat-unit">tipus de valors anòmals</span>
+          </div>
+          <p><code>describe()</code> i histogrames van revelar reserves amb 55 adults, ADR negatius, pics a 5.400 €, estades de 0 nits i ocupants 0.</p>
+        </li>
+
+        <li class="process-step">
+          <div class="process-step-num">03</div>
+          <h3>Neteja</h3>
+          <div class="process-stat">
+            <span class="process-stat-num">117.398</span>
+            <span class="process-stat-unit">reserves vàlides · −1,67%</span>
+          </div>
+          <p>Adults &lt; 10, ADR ∈ [0, 1000), estades positives, ocupants positius, NA de <code>children</code> → 0. Regles del notebook docent.</p>
+        </li>
+
+        <li class="process-step process-step-key">
+          <div class="process-step-num">04</div>
+          <h3>El descobriment</h3>
+          <div class="process-stat">
+            <span class="process-stat-num">×3,8 / ×1,5</span>
+            <span class="process-stat-unit">ràtio pic-vall del preu (ADR)</span>
+          </div>
+          <p>Creuant <code>preu × mes × hotel</code> apareix el gir: el <span class="tag tag-resort">Resort</span> multiplica el preu per <strong>3,8</strong> entre l'hivern i l'agost; la <span class="tag tag-city">City</span> només <strong>1,5</strong>. <em>No és el mateix negoci.</em></p>
+        </li>
+
+      </ol>
+
+      <div class="process-footer">
+        <a href="analisi.html" class="process-link">→ Documentació detallada del procés</a>
+        <a href="https://github.com/marcgarreta/uoc-vis-pac3/blob/main/notebooks/hotel_bookings.ipynb" class="process-link" target="_blank" rel="noopener">→ Notebook complet (.ipynb)</a>
       </div>
     </div>
   </section>
@@ -335,7 +397,7 @@
   <script src="https://unpkg.com/scrollama@3.2.0/build/scrollama.min.js"></script>
 
   <!-- Dades i charts -->
-  <script src="js/data.js?v=4"></script>
-  <script src="js/charts.js?v=4"></script>
+  <script src="js/data.js?v=5"></script>
+  <script src="js/charts.js?v=5"></script>
 </body>
 </html>
