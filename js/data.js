@@ -37,16 +37,17 @@ const HOTEL_DATA = {
   },
 
   countries: {
-    // % top 7 (sobre totes les reserves del segment); resta dins "Altres"
+    // % sobre totes les reserves del segment, per als 8 països més rellevants
+    // del relat. La resta (USA, BEL, BRA, NLD, etc.) cau dins "Altres" al Sankey.
     resort: {
-      countries: ["PRT","GBR","ESP","IRL","FRA","CN","USA","DEU"],
-      alta:     [42.3, 16.3, 10.9, 6.6, 3.3, 2.9, 1.8, 0],
-      baixa:    [45.0, 18.1,  9.5, 4.9, 4.6, 0,   0,   3.9]
+      countries: ["PRT","GBR","ESP","IRL","FRA","DEU","CN","ITA"],
+      alta:     [42.3, 16.3, 10.9, 6.6, 3.3, 1.8, 2.9, 1.2],
+      baixa:    [45.0, 18.1,  9.5, 4.9, 4.6, 3.9, 1.1, 1.2]
     },
     city: {
-      countries: ["PRT","FRA","DEU","GBR","ESP","ITA","BEL","BRA"],
-      alta:     [38.3,  9.9, 8.8, 7.9, 6.0, 4.3, 2.7, 0],
-      baixa:    [38.4, 12.1, 7.1, 6.0, 5.8, 4.2, 0,   2.8]
+      countries: ["PRT","GBR","ESP","IRL","FRA","DEU","CN","ITA"],
+      alta:     [38.3,  7.9, 6.0, 1.5, 9.9, 8.8, 0.9, 4.3],
+      baixa:    [38.4,  6.0, 5.8, 1.6, 12.1, 7.1, 0.6, 4.2]
     }
   },
 
