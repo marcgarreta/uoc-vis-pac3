@@ -2,7 +2,8 @@
 
 Storytelling de dades sobre l'estacionalitat oculta a les reserves de dos hotels portuguesos.
 
-**PAC3 · Visualització de Dades · UOC · Marc Garreta**
+**PAC3 · Visualització de Dades · UOC · maig 2026**
+Marc Garreta Basora
 
 🔗 **Storytelling**: <https://marcgarreta.github.io/uoc-vis-pac3/>
 
@@ -10,7 +11,7 @@ Storytelling de dades sobre l'estacionalitat oculta a les reserves de dos hotels
 
 - `index.html` — storytelling principal (scrollytelling amb Plotly.js + Scrollama)
 - `analisi.html` — documentació del procés d'anàlisi visual
-- `guio.html` — guió del vídeo (ús intern, no enllaçat des de la portada)
+- `GUIO.md` — guió del vídeo (markdown, ús intern per a l'enregistrament)
 - `notebooks/hotel_bookings.ipynb` — anàlisi exploratori
 - `data/hotel_bookings.csv` — dataset original
 - `kb/` — bibliografia (paper original, paper d'inspiració, enunciat PAC)
