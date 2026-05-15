@@ -425,7 +425,6 @@ code {
 .synth-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
   gap: 36px 44px;
 }
 
@@ -434,7 +433,6 @@ code {
   flex-direction: column;
   border-top: 2px solid var(--color-ink);
   padding-top: 14px;
-  min-height: 260px;
 }
 
 .synth-panel-head {
@@ -468,9 +466,9 @@ code {
 }
 
 .synth-chart {
-  flex: 1;
-  min-height: 150px;
+  height: 200px;
   width: 100%;
+  margin-top: 6px;
 }
 
 .synth-panel-take {
