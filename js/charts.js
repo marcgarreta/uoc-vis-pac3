@@ -381,6 +381,137 @@ function chartFinal() {
   return chartADR('final');
 }
 
+/* ==========================================================
+   SÍNTESI FINAL — 4 mini-charts (small multiples poster)
+   ========================================================== */
+function miniLayout(yRange, ySuffix) {
+  return {
+    paper_bgcolor: COLORS.paper,
+    plot_bgcolor:  COLORS.paper,
+    font: { family: FONT_BODY, size: 11, color: COLORS.ink },
+    margin: { l: 44, r: 16, t: 18, b: 28 },
+    showlegend: false,
+    xaxis: {
+      showgrid: false,
+      showline: true,
+      linecolor: COLORS.rule,
+      linewidth: 1,
+      ticks: 'outside',
+      tickcolor: COLORS.rule,
+      ticklen: 3,
+      tickfont: { family: FONT_MONO, size: 9, color: COLORS.inkMute },
+      zeroline: false,
+      automargin: false,
+      fixedrange: true,
+      tickvals: [0, 3, 6, 9, 11],
+      ticktext: ['Gen', 'Abr', 'Jul', 'Oct', 'Des']
+    },
+    yaxis: {
+      showgrid: true,
+      gridcolor: COLORS.rule,
+      griddash: 'dot',
+      showline: false,
+      tickfont: { family: FONT_MONO, size: 9, color: COLORS.inkMute },
+      zeroline: false,
+      automargin: false,
+      autorange: false,
+      range: yRange,
+      ticksuffix: ySuffix || '',
+      fixedrange: true,
+      nticks: 4
+    },
+    hoverlabel: {
+      bgcolor: COLORS.ink, bordercolor: COLORS.ink,
+      font: { family: FONT_MONO, size: 11, color: COLORS.paper }
+    },
+    shapes: [
+      {
+        type: 'rect',
+        xref: 'x', yref: 'paper',
+        x0: 6.5, x1: 7.5,
+        y0: 0, y1: 1,
+        fillcolor: COLORS.gold, opacity: 0.14,
+        line: { width: 0 },
+        layer: 'below'
+      }
+    ],
+    annotations: []
+  };
+}
+
+function miniLine(elId, yKeyResort, yKeyCity, yRange, ySuffix, hoverFmt) {
+  const x = HOTEL_DATA.months_ca;
+  const data = [
+    {
+      x, y: HOTEL_DATA.city[yKeyCity],
+      type: 'scatter', mode: 'lines',
+      line: { color: COLORS.city, width: 2.2, shape: 'spline', smoothing: 0.8 },
+      hovertemplate: '<b>%{x}</b> · City · ' + hoverFmt + '<extra></extra>'
+    },
+    {
+      x, y: HOTEL_DATA.resort[yKeyResort],
+      type: 'scatter', mode: 'lines',
+      line: { color: COLORS.resort, width: 2.6, shape: 'spline', smoothing: 0.8 },
+      hovertemplate: '<b>%{x}</b> · Resort · ' + hoverFmt + '<extra></extra>'
+    }
+  ];
+  const layout = miniLayout(yRange, ySuffix);
+  Plotly.newPlot(elId, data, layout, PLOTLY_CONFIG);
+}
+
+function miniArea(elId, yKey, yRange, ySuffix, hoverFmt) {
+  const x = HOTEL_DATA.months_ca;
+  const data = [
+    {
+      x, y: HOTEL_DATA.city[yKey],
+      type: 'scatter', mode: 'lines',
+      fill: 'tozeroy', fillcolor: COLORS.cityDim,
+      line: { color: COLORS.city, width: 2, shape: 'spline', smoothing: 0.8 },
+      hovertemplate: '<b>%{x}</b> · City · ' + hoverFmt + '<extra></extra>'
+    },
+    {
+      x, y: HOTEL_DATA.resort[yKey],
+      type: 'scatter', mode: 'lines',
+      fill: 'tozeroy', fillcolor: COLORS.resortDim,
+      line: { color: COLORS.resort, width: 2.4, shape: 'spline', smoothing: 0.8 },
+      hovertemplate: '<b>%{x}</b> · Resort · ' + hoverFmt + '<extra></extra>'
+    }
+  ];
+  const layout = miniLayout(yRange, ySuffix);
+  Plotly.newPlot(elId, data, layout, PLOTLY_CONFIG);
+}
+
+function renderSynthesis() {
+  // Top-left: volum (k reserves)
+  const x = HOTEL_DATA.months_ca;
+  const cityK   = HOTEL_DATA.city.n.map(v => v / 1000);
+  const resortK = HOTEL_DATA.resort.n.map(v => v / 1000);
+  Plotly.newPlot('synth-volume', [
+    {
+      x, y: cityK, type: 'scatter', mode: 'lines',
+      line: { color: COLORS.city, width: 2.2, shape: 'spline', smoothing: 0.8 },
+      hovertemplate: '<b>%{x}</b> · City · %{y:.1f}k reserves<extra></extra>'
+    },
+    {
+      x, y: resortK, type: 'scatter', mode: 'lines',
+      line: { color: COLORS.resort, width: 2.6, shape: 'spline', smoothing: 0.8 },
+      hovertemplate: '<b>%{x}</b> · Resort · %{y:.1f}k reserves<extra></extra>'
+    }
+  ], (() => {
+    const l = miniLayout([0, 10], 'k');
+    return l;
+  })(), PLOTLY_CONFIG);
+
+  // Top-right: ADR (€)
+  miniLine('synth-adr', 'adr', 'adr', [0, 220], '€', '€%{y:.0f}');
+
+  // Bottom-left: estada (nits)
+  miniLine('synth-stays', 'stays', 'stays', [0, 6.5], 'n', '%{y:.2f} nits');
+
+  // Bottom-right: famílies (%) — àrea apilada visualment
+  miniArea('synth-families', 'families', [0, 25], '%', '%{y:.1f}%');
+}
+
 /* ----------------------------------------------------------
    Renderitzador d'una passa
    ---------------------------------------------------------- */
@@ -447,4 +578,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // render inicial (pas 1) per evitar gràfic buit
   renderStep(1);
   initScrolly();
+
+  // poster final amb 4 mini-charts
+  renderSynthesis();
+
+  // resize també recalcula el poster
+  window.addEventListener('resize', () => {
+    ['synth-volume', 'synth-adr', 'synth-stays', 'synth-families'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) Plotly.Plots.resize(el);
+    });
+  });
 });
