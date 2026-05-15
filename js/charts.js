@@ -377,13 +377,20 @@ function chartCountries() {
     });
   });
 
-  // "Altres" — residual de cada destinació (suma fins a ~100%)
+  // "Altres" — residual = 1 - suma dels països nominats. Càlcul automàtic.
+  let sumRA = 0, sumRB = 0, sumCA = 0, sumCB = 0;
+  COUNTRIES.forEach(co => {
+    sumRA += pctOf(r, co.iso, r.alta);
+    sumRB += pctOf(r, co.iso, r.baixa);
+    sumCA += pctOf(c, co.iso, c.alta);
+    sumCB += pctOf(c, co.iso, c.baixa);
+  });
   const altresIdx = 8;
   const altres = [
-    { tgt: 9,  v: RESORT_ALTA  * 0.181, c: LINK_COLORS.resortAlta },
-    { tgt: 10, v: RESORT_BAIXA * 0.126, c: LINK_COLORS.resortBaixa },
-    { tgt: 11, v: CITY_ALTA    * 0.259, c: LINK_COLORS.cityAlta },
-    { tgt: 12, v: CITY_BAIXA   * 0.268, c: LINK_COLORS.cityBaixa }
+    { tgt: 9,  v: RESORT_ALTA  * Math.max(0, 1 - sumRA), c: LINK_COLORS.resortAlta },
+    { tgt: 10, v: RESORT_BAIXA * Math.max(0, 1 - sumRB), c: LINK_COLORS.resortBaixa },
+    { tgt: 11, v: CITY_ALTA    * Math.max(0, 1 - sumCA), c: LINK_COLORS.cityAlta },
+    { tgt: 12, v: CITY_BAIXA   * Math.max(0, 1 - sumCB), c: LINK_COLORS.cityBaixa }
   ];
   altres.forEach(f => {
     sources.push(altresIdx);
