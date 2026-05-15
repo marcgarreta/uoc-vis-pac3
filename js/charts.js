@@ -299,31 +299,151 @@ function chartFamilies() {
 }
 
 /* ----------------------------------------------------------
-   PAS 6 — Països × temporada (Resort)
+   PAS 6 — Sankey: Origen → Hotel · Temporada
    ---------------------------------------------------------- */
 function chartCountries() {
-  const c = HOTEL_DATA.countries.resort;
-  const data = [
-    {
-      x: c.countries, y: c.alta,
-      type: 'bar', name: 'Temporada alta (jun-set)',
-      marker: { color: COLORS.resort, line: { width: 0 } },
-      hovertemplate: '<b>%{x}</b><br>Alta · %{y:.1f}%<extra></extra>'
-    },
-    {
-      x: c.countries, y: c.baixa,
-      type: 'bar', name: 'Temporada baixa (oct-mai)',
-      marker: { color: COLORS.resortSoft, line: { width: 0 } },
-      hovertemplate: '<b>%{x}</b><br>Baixa · %{y:.1f}%<extra></extra>'
-    }
+  // Totals aproximats de reserves per (hotel × temporada),
+  // alta = jun-set (idx 5,6,7,8 dels arrays mensuals).
+  const RESORT_ALTA  = 15433;  // 3003+4512+4849+3069
+  const RESORT_BAIXA = 23874;  // resort total - alta
+  const CITY_ALTA    = 31928;  // 7814+7976+8858+7280
+  const CITY_BAIXA   = 46163;  // city total - alta
+
+  const COUNTRIES = [
+    { iso: 'PRT', label: 'Portugal' },
+    { iso: 'GBR', label: 'Regne Unit' },
+    { iso: 'ESP', label: 'Espanya' },
+    { iso: 'FRA', label: 'França' },
+    { iso: 'DEU', label: 'Alemanya' },
+    { iso: 'IRL', label: 'Irlanda' },
+    { iso: 'ITA', label: 'Itàlia' },
+    { iso: 'CN',  label: 'Xina' }
   ];
-  const layout = baseLayout();
-  layout.barmode = 'group';
-  layout.bargap = 0.28;
-  layout.bargroupgap = 0.08;
-  layout.yaxis.range = [0, 60];
-  layout.yaxis.ticksuffix = ' %';
-  layout.yaxis.title = { text: '% reserves del Resort per origen', font: { family: FONT_MONO, size: 11, color: COLORS.inkMute } };
+
+  const r = HOTEL_DATA.countries.resort;
+  const c = HOTEL_DATA.countries.city;
+
+  const pctOf = (block, iso, arr) => {
+    const i = block.countries.indexOf(iso);
+    return i >= 0 ? arr[i] / 100 : 0;
+  };
+
+  // Etiquetes dels nodes: 0-7 països, 8 Altres, 9-12 destinacions
+  const labels = [
+    ...COUNTRIES.map(co => co.label),
+    'Altres',
+    'Resort · Alta',
+    'Resort · Baixa',
+    'City · Alta',
+    'City · Baixa'
+  ];
+
+  const nodeColors = [
+    ...COUNTRIES.map(() => COLORS.inkMute),
+    COLORS.inkMute,             // Altres
+    COLORS.resort,              // Resort alta
+    COLORS.resortSoft,          // Resort baixa
+    COLORS.city,                // City alta
+    COLORS.citySoft             // City baixa
+  ];
+
+  // Colors dels links (lleugerament transparents perquè es vegin solapaments)
+  const LINK_COLORS = {
+    resortAlta:  'rgba(192, 74, 48, 0.42)',
+    resortBaixa: 'rgba(232, 181, 168, 0.55)',
+    cityAlta:    'rgba(46, 80, 119, 0.42)',
+    cityBaixa:   'rgba(181, 197, 214, 0.6)'
+  };
+
+  const sources = [];
+  const targets = [];
+  const values  = [];
+  const linkColors = [];
+
+  COUNTRIES.forEach((country, i) => {
+    const flows = [
+      { tgt: 9,  v: pctOf(r, country.iso, r.alta)  * RESORT_ALTA,  c: LINK_COLORS.resortAlta },
+      { tgt: 10, v: pctOf(r, country.iso, r.baixa) * RESORT_BAIXA, c: LINK_COLORS.resortBaixa },
+      { tgt: 11, v: pctOf(c, country.iso, c.alta)  * CITY_ALTA,    c: LINK_COLORS.cityAlta },
+      { tgt: 12, v: pctOf(c, country.iso, c.baixa) * CITY_BAIXA,   c: LINK_COLORS.cityBaixa }
+    ];
+    flows.forEach(f => {
+      if (f.v > 1) {
+        sources.push(i);
+        targets.push(f.tgt);
+        values.push(f.v);
+        linkColors.push(f.c);
+      }
+    });
+  });
+
+  // "Altres" — residual de cada destinació (suma fins a ~100%)
+  const altresIdx = 8;
+  const altres = [
+    { tgt: 9,  v: RESORT_ALTA  * 0.181, c: LINK_COLORS.resortAlta },
+    { tgt: 10, v: RESORT_BAIXA * 0.126, c: LINK_COLORS.resortBaixa },
+    { tgt: 11, v: CITY_ALTA    * 0.259, c: LINK_COLORS.cityAlta },
+    { tgt: 12, v: CITY_BAIXA   * 0.268, c: LINK_COLORS.cityBaixa }
+  ];
+  altres.forEach(f => {
+    sources.push(altresIdx);
+    targets.push(f.tgt);
+    values.push(f.v);
+    linkColors.push(f.c);
+  });
+
+  const data = [{
+    type: 'sankey',
+    arrangement: 'snap',
+    valueformat: ',.0f',
+    valuesuffix: ' reserves',
+    node: {
+      label: labels,
+      color: nodeColors,
+      pad: 14,
+      thickness: 16,
+      line: { color: COLORS.paper, width: 1 },
+      hovertemplate: '<b>%{label}</b><br>%{value:,.0f} reserves<extra></extra>'
+    },
+    link: {
+      source: sources,
+      target: targets,
+      value: values,
+      color: linkColors,
+      hovertemplate: '%{source.label} → %{target.label}<br><b>%{value:,.0f}</b> reserves<extra></extra>'
+    },
+    textfont: {
+      family: FONT_MONO,
+      size: 12,
+      color: COLORS.ink
+    }
+  }];
+
+  const layout = {
+    paper_bgcolor: COLORS.paper,
+    plot_bgcolor: COLORS.paper,
+    font: { family: FONT_BODY, size: 13, color: COLORS.ink },
+    margin: { l: 8, r: 8, t: 36, b: 8 },
+    hoverlabel: {
+      bgcolor: COLORS.ink, bordercolor: COLORS.ink,
+      font: { family: FONT_MONO, size: 12, color: COLORS.paper }
+    },
+    annotations: [
+      {
+        x: 0, y: 1.05, xref: 'paper', yref: 'paper',
+        text: 'ORIGEN',
+        showarrow: false, xanchor: 'left',
+        font: { family: FONT_MONO, size: 10, color: COLORS.inkMute }
+      },
+      {
+        x: 1, y: 1.05, xref: 'paper', yref: 'paper',
+        text: 'HOTEL · TEMPORADA',
+        showarrow: false, xanchor: 'right',
+        font: { family: FONT_MONO, size: 10, color: COLORS.inkMute }
+      }
+    ]
+  };
+
   return { data, layout };
 }
 
@@ -536,7 +656,7 @@ function renderStep(stepNum) {
     'Preu mig per nit (ADR) · pic d\'agost',
     'Estada mitjana per mes',
     '% reserves amb famílies (nens o nadons)',
-    'Origen dels hostes del Resort · temporada',
+    'D\'on vénen · flux origen → hotel × temporada',
     '% ingressos anuals per trimestre',
     'Preu mig per nit (ADR) · síntesi'
   ];
