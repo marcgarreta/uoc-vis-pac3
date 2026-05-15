@@ -4,7 +4,7 @@ Storytelling de dades sobre l'estacionalitat oculta a les reserves de dos hotels
 
 **PAC3 · Visualització de Dades · UOC · Marc Garreta**
 
-🔗 **Storytelling**: <https://marc-garreta.github.io/uoc-vis-pac3/>
+🔗 **Storytelling**: <https://marcgarreta.github.io/uoc-vis-pac3/>
 
 ## Estructura
 
